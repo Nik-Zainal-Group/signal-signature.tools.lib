@@ -93,10 +93,10 @@ tabToSNVcatalogue <- function(subs, genome.v="hg19") {
   result$muts <- muts
   ######
 
-  subs$bb <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position-1, end=subs$position-1))
-  subs$ba <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position+1, end=subs$position+1))
-  subs$wt.ref <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position, end=subs$position))
-  subs$triplets <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position-1, end=subs$position+1))
+  if (!"bb" %in% colnames(subs)) subs$bb <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position-1, end=subs$position-1))
+  if (!"ba" %in% colnames(subs)) subs$ba <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position+1, end=subs$position+1))
+  if (!"wt.ref" %in% colnames(subs)) subs$wt.ref <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position, end=subs$position))
+  if (!"triplets" %in% colnames(subs)) subs$triplets <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position-1, end=subs$position+1))
 
   # table of mutations
   mut.table <- data.frame(bbef=as.character(subs$bb ), 
