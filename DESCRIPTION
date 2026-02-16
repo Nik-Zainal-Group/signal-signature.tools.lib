@@ -12,13 +12,9 @@ Remotes:
     linxihui/NNLM,
     Nik-Zainal-Group/signal-indelsig.tools.lib
 Suggests:
-    BSgenome.Mmusculus.UCSC.mm10,
-    BSgenome.Cfamiliaris.UCSC.canFam3,
     GenSA
 Imports: 
     VariantAnnotation,
-    BSgenome.Hsapiens.UCSC.hg38,
-    BSgenome.Hsapiens.1000genomes.hs37d5,
     SummarizedExperiment,
     BiocGenerics,
     GenomeInfoDb,
