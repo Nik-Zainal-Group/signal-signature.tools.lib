@@ -11,21 +11,22 @@
 #' @examples
 #' subs <- read.table("subs.tab",sep="\t",header = TRUE,check.names = FALSE,stringsAsFactors = FALSE)
 #' res <- tabToSNVcatalogue(subs,genome.v = "hg19")
-tabToSNVcatalogue <- function(subs, genome.v="hg19") {
+tabToSNVcatalogue <- function(subs, genome.v) {
 
-  if(genome.v=="hg19"){
-    genomeSeq <- BSgenome.Hsapiens.1000genomes.hs37d5::BSgenome.Hsapiens.1000genomes.hs37d5
-    expected_chroms <- paste0(c(seq(1:22),"X","Y"))
-  }else if(genome.v=="hg38"){
-    genomeSeq <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38
-    expected_chroms <- paste0("chr",c(seq(1:22),"X","Y"))
-  }else if(genome.v=="mm10"){
-    genomeSeq <- BSgenome.Mmusculus.UCSC.mm10::BSgenome.Mmusculus.UCSC.mm10
-    expected_chroms <- paste0("chr",c(seq(1:19),"X","Y"))
-  }else if(genome.v=="canFam3"){
-    genomeSeq <- BSgenome.Cfamiliaris.UCSC.canFam3::BSgenome.Cfamiliaris.UCSC.canFam3
-    expected_chroms <- paste0("chr",c(seq(1:38),"X")) 
-  }
+  # subs will contain context so we don't need reference build
+  # if(genome.v=="hg19"){
+  #   genomeSeq <- BSgenome.Hsapiens.1000genomes.hs37d5::BSgenome.Hsapiens.1000genomes.hs37d5
+  #   expected_chroms <- paste0(c(seq(1:22),"X","Y"))
+  # }else if(genome.v=="hg38"){
+  #   genomeSeq <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38
+  #   expected_chroms <- paste0("chr",c(seq(1:22),"X","Y"))
+  # }else if(genome.v=="mm10"){
+  #   genomeSeq <- BSgenome.Mmusculus.UCSC.mm10::BSgenome.Mmusculus.UCSC.mm10
+  #   expected_chroms <- paste0("chr",c(seq(1:19),"X","Y"))
+  # }else if(genome.v=="canFam3"){
+  #   genomeSeq <- BSgenome.Cfamiliaris.UCSC.canFam3::BSgenome.Cfamiliaris.UCSC.canFam3
+  #   expected_chroms <- paste0("chr",c(seq(1:38),"X")) 
+  # }
   
   # plots mutation-context for all variants in the vcf file
   # and separately for the variants that passed
@@ -57,13 +58,14 @@ tabToSNVcatalogue <- function(subs, genome.v="hg19") {
     message("[tabToSNVcatalogue warning] mutations table contains ",nmutsloaded-nmutstoanalyse," indels, which were ignored.")
   }
   
-  if (genome.v=="hg38" || genome.v=="mm10") {
-    if(length(intersect(subs$chr,expected_chroms))==0) subs$chr <- paste0("chr",subs$chr)
-  }
+  # We don't need this due to context already in subs.
+  # if (genome.v=="hg38" || genome.v=="mm10") {
+  #   if(length(intersect(subs$chr,expected_chroms))==0) subs$chr <- paste0("chr",subs$chr)
+  # }
   
-  if(nrow(subs)>0){
-    subs <- subs[subs$chr %in% expected_chroms,,drop=F]
-  }
+  # if(nrow(subs)>0){
+  #   subs <- subs[subs$chr %in% expected_chroms,,drop=F]
+  # }
 
   subs$wt <- subs$REF
   subs$mt <- subs$ALT
@@ -93,10 +95,10 @@ tabToSNVcatalogue <- function(subs, genome.v="hg19") {
   result$muts <- muts
   ######
 
-  if (!"bb" %in% colnames(subs)) subs$bb <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position-1, end=subs$position-1))
-  if (!"ba" %in% colnames(subs)) subs$ba <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position+1, end=subs$position+1))
-  if (!"wt.ref" %in% colnames(subs)) subs$wt.ref <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position, end=subs$position))
-  if (!"triplets" %in% colnames(subs)) subs$triplets <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position-1, end=subs$position+1))
+  # subs$bb <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position-1, end=subs$position-1))
+  # subs$ba <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position+1, end=subs$position+1))
+  # subs$wt.ref <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position, end=subs$position))
+  # subs$triplets <- as.character(BSgenome::getSeq(genomeSeq, as.character(subs$chr), start=subs$position-1, end=subs$position+1))
 
   # table of mutations
   mut.table <- data.frame(bbef=as.character(subs$bb ), 
